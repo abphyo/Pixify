@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Home -->
+    <string name="refresh">Refresh</string>
+    <string name="exit">Exit</string>
+    <string name="home">Home</string>
+
+    <!-- content description -->
+    <string name="back_click">Back click</string>
+
+</resources>
