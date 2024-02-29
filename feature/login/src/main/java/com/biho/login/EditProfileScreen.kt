@@ -174,7 +174,7 @@ fun EditProfileScreen(
                                 count = tabItems.size,
                                 interactionSource = interactionSource,
                                 modifier = Modifier
-                                    .fillMaxWidth()
+                                    .fillMaxSize()
                                     .height(DIMENS_345dp)
                             ) { page, _ ->
                                 when (page) {

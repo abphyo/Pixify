@@ -17,8 +17,8 @@ import com.biho.pixify.core.model.danbooru.model.post.MediaType
 import com.biho.pixify.core.model.danbooru.model.profile.ContentFilter
 import com.biho.pixify.core.model.danbooru.model.profile.PostScreenImageType
 import com.biho.pixify.core.model.danbooru.model.profile.ProfileEditField
-import com.biho.product.composables.ExposedDropDownRow
-import com.biho.product.composables.RadioButtonRow
+import com.biho.product.composables.FilterChipDropDownRow
+import com.biho.product.composables.SwitchButtonRow
 import com.biho.resources.R
 import com.biho.resources.theme.DIMENS_16dp
 import com.biho.resources.theme.DIMENS_8dp
@@ -41,8 +41,8 @@ fun ProfileSettingsPage(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(DIMENS_16dp))
-        ExposedDropDownRow(
+        Spacer(modifier = Modifier.height(DIMENS_8dp))
+        FilterChipDropDownRow(
             leadingText = stringResource(id = R.string.content_filtering),
             additionalText = null,
             selectedOption = profileEditField.contentFilter.name,
@@ -57,7 +57,7 @@ fun ProfileSettingsPage(
             }
         )
         Spacer(modifier = Modifier.height(DIMENS_8dp))
-        ExposedDropDownRow(
+        FilterChipDropDownRow(
             leadingText = stringResource(id = R.string.detail_image_resolution),
             additionalText = stringResource(id = R.string.image_resolution_helper_text),
             selectedOption = profileEditField.postScreenImageType.name,
@@ -72,7 +72,7 @@ fun ProfileSettingsPage(
             }
         )
         Spacer(modifier = Modifier.height(DIMENS_8dp))
-        ExposedDropDownRow(
+        FilterChipDropDownRow(
             leadingText = stringResource(id = R.string.home_image_resolution),
             additionalText = stringResource(id = R.string.image_resolution_helper_text),
             selectedOption = profileEditField.homeScreenImageType.name,
@@ -87,26 +87,19 @@ fun ProfileSettingsPage(
             }
         )
         Spacer(modifier = Modifier.height(DIMENS_16dp))
-        RadioButtonRow(
-            leadingText = stringResource(
-                id = R.string.enable_safe_mode
-            ),
+        SwitchButtonRow(
+            leadingText = stringResource(id = R.string.enable_safe_mode),
             additionalText = null,
-            selected = profileEditField.enabledSafeMode,
-            onClick = toggleSafeMode,
+            checked = profileEditField.enabledSafeMode,
+            onCheckedChange = toggleSafeMode
         )
         Spacer(modifier = Modifier.height(DIMENS_8dp))
-        RadioButtonRow(
-            leadingText = stringResource(
-                id = R.string.hide_deleted_posts
-            ),
-            additionalText = stringResource(
-                id = R.string.hide_deleted_posts_helper_text
-            ),
-            selected = profileEditField.hideDeletedPosts,
-            onClick = toggleHideDeletedPost
+        SwitchButtonRow(
+            leadingText = stringResource(id = R.string.hide_deleted_posts),
+            additionalText = stringResource(id = R.string.hide_deleted_posts_helper_text),
+            checked = profileEditField.hideDeletedPosts,
+            onCheckedChange = toggleHideDeletedPost
         )
-        Spacer(modifier = Modifier.height(DIMENS_16dp))
     }
 }
 

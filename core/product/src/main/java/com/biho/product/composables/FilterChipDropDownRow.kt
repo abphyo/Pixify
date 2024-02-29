@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -28,7 +27,7 @@ import com.biho.ui.model.PixiMenuItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExposedDropDownRow(
+fun FilterChipDropDownRow(
     leadingText: String,
     additionalText: String?,
     selectedOption: String,
@@ -43,7 +42,7 @@ fun ExposedDropDownRow(
     var itemHeight by remember {
         mutableStateOf(0.dp)
     }
-    val density = LocalDensity.current
+//    val density = LocalDensity.current
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -54,33 +53,37 @@ fun ExposedDropDownRow(
             if (!additionalText.isNullOrEmpty())
                 Text(text = additionalText, style = MaterialTheme.typography.bodyMedium)
         }
-        ExposedDropdownMenuBox(
-            expanded = false,
-            onExpandedChange = {},
+        FilterChip(
+            selected = false,
+            onClick = {
+                dropDownMenuVisible = true
+            },
+            label = {
+                Text(
+                    text = selectedOption,
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+                )
+            },
             modifier = Modifier
+                .onSizeChanged {
+                    itemHeight = it.height.dp
+                }
                 .pointerInput(true) {
                     detectTapGestures(
                         onTap = {
-                            dropDownMenuVisible = true
                             pressOffset = DpOffset(x = it.x.toDp(), y = it.y.toDp())
                         }
                     )
                 }
-                .onSizeChanged {
-                    itemHeight = with(density) {
-                        it.height.dp
-                    }
 
-                }) {
-            Text(
-                text = selectedOption,
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
-            )
-        }
+        )
         BuildDropDownMenu(
             expanded = dropDownMenuVisible,
             onDismissRequest = { dropDownMenuVisible = false },
-            items = dropDownItems
+            items = dropDownItems,
+            pressOffset = pressOffset.copy(
+                y = pressOffset.y - itemHeight
+            )
         )
     }
 }
