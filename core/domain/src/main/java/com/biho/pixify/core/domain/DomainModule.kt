@@ -1,7 +1,7 @@
 package com.biho.pixify.core.domain
 
 import com.biho.pixify.core.domain.usecases.DeleteUserFromDatabase
-import com.biho.pixify.core.domain.usecases.EditProfileSettings
+import com.biho.pixify.core.domain.usecases.UpdateProfileSettings
 import com.biho.pixify.core.domain.usecases.GetPosts
 import com.biho.pixify.core.domain.usecases.GetTagAutoCompletes
 import com.biho.pixify.core.domain.usecases.GetUsersFromDatabase
@@ -20,5 +20,5 @@ fun domainModule() = module {
     factoryOf(::GetUsersFromDatabase)
     factoryOf(::DeleteUserFromDatabase)
     factoryOf(::SwitchActiveUserToDatabase)
-    factoryOf(::EditProfileSettings)
+    factoryOf(::UpdateProfileSettings)
 }

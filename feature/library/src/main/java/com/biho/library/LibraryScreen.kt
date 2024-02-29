@@ -29,9 +29,13 @@ import com.biho.resources.theme.DIMENS_8dp
 import com.biho.resources.theme.LocalButtonGradient
 import com.biho.resources.theme.theming_green
 import com.biho.ui.screen.LibraryRoute
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.PagerState
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun LibraryScreen(
+    pagerState: PagerState,
     profiles: List<Profile>,
     navigateToProfileScreen: (Int?) -> Unit,
     createProfile: () -> Unit,
@@ -68,6 +72,7 @@ fun LibraryScreen(
                 contentAlignment = Alignment.BottomStart
             ) {
                 ProfilePager(
+                    pagerState = pagerState,
                     profiles = profiles,
                     onItemSelect = selectProfile,
                     onItemClick = navigateToProfileScreen,

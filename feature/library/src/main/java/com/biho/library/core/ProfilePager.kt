@@ -33,6 +33,7 @@ import com.biho.resources.theme.DIMENS_4dp
 import com.biho.resources.theme.DIMENS_8dp
 import com.biho.resources.theme.theming_green
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import kotlin.math.absoluteValue
 
@@ -40,6 +41,7 @@ import kotlin.math.absoluteValue
 @Composable
 fun ProfilePager(
     profiles: List<Profile>,
+    pagerState: PagerState,
     onItemSelect: (Int?) -> Unit,
     onItemClick: (Int?) -> Unit,
     onItemEdit: (Int?) -> Unit,
@@ -57,6 +59,7 @@ fun ProfilePager(
             )
     ) {
         CustomHorizontalPager(
+            pagerState = pagerState,
             count = profiles.size,
             interactionSource = interactionSource,
             modifier = Modifier
@@ -107,7 +110,8 @@ fun ProfilePager(
                     when {
                         profiles[page].isActive -> Editor(
                             onEdit = { onItemEdit(profile.roomId) },
-                            onDelete = { onItemDelete(profile) }
+                            onDelete = { onItemDelete(profile) },
+                            isDefaultAcc = profile.roomId == 1
                         )
                         !profiles[page].isActive -> Select {
                             onItemSelect(profile.roomId)
@@ -137,7 +141,8 @@ fun Select(
 @Composable
 fun Editor(
     onEdit: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    isDefaultAcc: Boolean
 ) {
     Text(
         modifier = Modifier.noRippleClickable {
@@ -146,12 +151,14 @@ fun Editor(
         text = stringResource(id = R.string.edit),
         style = MaterialTheme.typography.bodySmall.copy(color = theming_green)
     )
-    Spacer(modifier = Modifier.width(DIMENS_16dp))
-    Text(
-        modifier = Modifier.noRippleClickable {
-            onDelete()
-        },
-        text = stringResource(id = R.string.delete),
-        style = MaterialTheme.typography.bodySmall.copy(color = Color.Red)
-    )
+    if (!isDefaultAcc) {
+        Spacer(modifier = Modifier.width(DIMENS_16dp))
+        Text(
+            modifier = Modifier.noRippleClickable {
+                onDelete()
+            },
+            text = stringResource(id = R.string.delete),
+            style = MaterialTheme.typography.bodySmall.copy(color = Color.Red)
+        )
+    }
 }

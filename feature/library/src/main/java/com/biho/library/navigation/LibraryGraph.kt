@@ -1,5 +1,6 @@
 package com.biho.library.navigation
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.input.TextFieldValue
@@ -14,11 +15,16 @@ import com.biho.login.EditProfileViewModel
 import com.biho.login.LoginScreen
 import com.biho.login.LoginViewModel
 import com.biho.pixify.core.model.danbooru.model.profile.Profile
+import com.biho.pixify.core.model.danbooru.model.profile.ProfileEditField
+import com.biho.pixify.core.model.danbooru.model.profile.ProfileSettingActions
 import com.biho.product.composables.ScreenUnderConstruction
 import com.biho.ui.screen.LibraryRoute
 import com.biho.ui.screen.MainRoute
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.rememberPagerState
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalPagerApi::class)
 fun NavGraphBuilder.libraryRoute(navController: NavHostController) {
 
     navigation(
@@ -40,13 +46,17 @@ fun NavGraphBuilder.libraryRoute(navController: NavHostController) {
             }
             val libraryViewModel = koinViewModel<LibraryViewModel>()
             val deleteProfile = { user: Profile ->
+
                 libraryViewModel.deleteProfile(user)
             }
             val selectProfile = { roomId: Int? ->
                 libraryViewModel.switchToProfile(roomId)
             }
             val profiles by libraryViewModel.profiles.collectAsState()
+            val activeProfile = profiles.find { it.isActive }
+            val pagerState = rememberPagerState(initialPage = profiles.indexOf(activeProfile) + 1)
             LibraryScreen(
+                pagerState = pagerState,
                 profiles = profiles,
                 navigateToProfileScreen = navigateToProfileScreen,
                 createProfile = navigateToCreateProfileScreen,
@@ -91,19 +101,32 @@ fun NavGraphBuilder.libraryRoute(navController: NavHostController) {
                 login = { loginViewModel.performLogin() }
             )
         }
-        composable(route = LibraryRoute.EditProfile.route) {
-            val editProfileViewModel = koinViewModel<EditProfileViewModel>()
+        composable(route = LibraryRoute.EditProfile.route) { entry ->
+            val editProfileViewModel =
+                koinViewModel<EditProfileViewModel>(viewModelStoreOwner = entry)
+            val cachedFields by editProfileViewModel.profileEditField.collectAsState(initial = ProfileEditField())
             val updateUsername = { value: TextFieldValue ->
-                editProfileViewModel.updateUsername(value.text)
+                editProfileViewModel.updateUsername(value)
             }
             val updateApiKey = { value: TextFieldValue ->
-                editProfileViewModel.updateApiKey(value.text)
+                editProfileViewModel.updateApiKey(value)
             }
+            val confirm = {
+                editProfileViewModel.confirmSettings(cachedFields)
+            }
+            val profileSettingActions = ProfileSettingActions(
+                setContentFilter = { editProfileViewModel.setContentFilter(it) },
+                setPostScreenImageType = { editProfileViewModel.setPostScreenImageType(it) },
+                setHomeScreenImageType = { editProfileViewModel.setHomeScreenImageType(it) },
+                toggleSafeMode = { editProfileViewModel.toggleSafeMode(it) },
+                toggleHideDeletedPost = { editProfileViewModel.toggleHideDeletedPost(it) }
+            )
             EditProfileScreen(
-                profileEditField = editProfileViewModel.profileEditField,
+                profileEditField = cachedFields,
                 onUsernameChanged = updateUsername,
                 onApiKeyChanged = updateApiKey,
-                confirm = {},
+                profileSettingActions = profileSettingActions,
+                confirm = confirm,
                 onNavigateBack = { navController.popBackStack() }
             )
         }

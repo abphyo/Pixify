@@ -26,8 +26,8 @@ interface UserDao {
     @Update
     suspend fun updateUser(user: User)
 
-    @Delete
-    suspend fun deleteUser(user: User)
+    @Query("delete from users where room_id = :roomId")
+    suspend fun deleteUser(roomId: Int)
 
     @Query("select * from users")
     fun getUsers(): Flow<List<User>>

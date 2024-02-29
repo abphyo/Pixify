@@ -1,12 +1,10 @@
 package com.biho.product.extensions
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.InteractionSource
@@ -84,13 +82,14 @@ fun Modifier.customTabIndicatorOffset(
         value = currentTabPosition
     }
 ) {
+//    tween(durationMillis = 250, easing = FastOutSlowInEasing)
     val currentTabWidth by animateDpAsState(
         targetValue = tabWidth,
-        animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing), label = ""
+        animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow), label = ""
     )
     val indicatorOffset by animateDpAsState(
         targetValue = ((currentTabPosition.left + currentTabPosition.right - tabWidth) / 2),
-        animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing), label = ""
+        animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow), label = ""
     )
     fillMaxWidth()
         .wrapContentSize(Alignment.BottomStart)

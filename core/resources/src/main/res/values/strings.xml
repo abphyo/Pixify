@@ -26,6 +26,13 @@
     <string name="add_account">Add account</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="confirm">Confirm</string>
+    <string name="content_filtering">Content filtering</string>
+    <string name="detail_image_resolution">Details page\'s image resolution</string>
+    <string name="home_image_resolution">Home page\'s image resolution</string>
+    <string name="image_resolution_helper_text">Higher resolution will take longer to load</string>
+    <string name="enable_safe_mode">Enable safe mode</string>
+    <string name="hide_deleted_posts">Hide deleted posts</string>
+    <string name="hide_deleted_posts_helper_text">Hide low-quality images, some decent ones might also be hidden</string>
 
     <!-- login -->
     <string name="username">Username</string>

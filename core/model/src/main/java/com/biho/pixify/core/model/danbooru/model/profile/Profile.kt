@@ -1,6 +1,7 @@
 package com.biho.pixify.core.model.danbooru.model.profile
 
 import com.biho.pixify.core.model.danbooru.model.post.MediaType
+import kotlinx.collections.immutable.toPersistentList
 
 data class Profile(
     val roomId: Int? = null,
@@ -45,3 +46,17 @@ enum class PostScreenImageType(val type: String) {
 }
 
 fun Profile.isGuest(): Boolean = isGuest
+
+fun Profile.getProfileEditField(): ProfileEditField {
+    return ProfileEditField(
+        userId = id ?: 0,
+        username = name ?: "",
+        apiKey = apiKey ?: "",
+        enabledSafeMode = profileSettings.enabledSafeMode,
+        hideDeletedPosts = profileSettings.hideDeletedPosts,
+        postScreenImageType = profileSettings.postScreenImagePref,
+        contentFilter = localProfileSettings.contentFiltering,
+        homeScreenImageType = localProfileSettings.contentImagePref,
+        blacklistedTags = profileSettings.blackListTags.toPersistentList()
+    )
+}

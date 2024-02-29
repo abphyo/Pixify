@@ -43,6 +43,7 @@ abstract class ApiCall : ImageBoardRepository {
     ): DomainResult<Unit> {
         return withContext(Dispatchers.IO) {
             try {
+                println("tried profile update api call")
                 val response = apiCall(mapper())
                 if (response.isSuccessful) {
                     DomainResult.Success(

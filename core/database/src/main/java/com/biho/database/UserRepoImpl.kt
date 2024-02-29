@@ -44,9 +44,12 @@ class UserRepoImpl(
     override suspend fun deleteUser(user: Profile): Result<Unit> {
         return try {
             ioScope.async {
-                userDao.deleteUser(user.toUser())
-                Result.success(Unit)
-            }.await()
+                Result.success(
+                    userDao.switchUser(newActiveUserId = 1)
+                )
+            }.await().onSuccess {
+                userDao.deleteUser(roomId = user.roomId!!)
+            }
         } catch (e: Exception) {
             Result.failure(e)
         }

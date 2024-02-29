@@ -30,5 +30,6 @@ fun provideDatabase(context: Context): PixifyDatabase {
                 }
             }
         )
+        .fallbackToDestructiveMigration()
         .build()
 }

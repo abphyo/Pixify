@@ -27,7 +27,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import com.biho.pixify.core.model.danbooru.model.profile.ProfileEditField
 import com.biho.resources.R
 import com.biho.resources.theme.DIMENS_16dp
 import com.biho.resources.theme.DIMENS_8dp
@@ -76,6 +75,7 @@ fun AuthenticationPage(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             value = username,
             onValueChange = {
+                println("username: ${it.text}")
                 updateUsername(it)
                 validateTextField1(it.text)
             },
@@ -94,7 +94,15 @@ fun AuthenticationPage(
                 )
             },
             leadingIcon = null,
-            trailingIcon = null
+            trailingIcon = null,
+            supportingText = {
+                if (textField1Empty)
+                    Text(
+                        text = "apiKey can't be empty",
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+            }
         )
         Spacer(modifier = Modifier.height(DIMENS_8dp))
         OutlinedTextField(
@@ -109,6 +117,7 @@ fun AuthenticationPage(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             value = apiKey,
             onValueChange = {
+                println("apikey: ${it.text}")
                 updateApiKey(it)
                 validateTextField2(it.text)
             },
@@ -127,7 +136,15 @@ fun AuthenticationPage(
                 )
             },
             leadingIcon = null,
-            trailingIcon = null
+            trailingIcon = null,
+            supportingText = {
+                if (textField2Empty)
+                    Text(
+                        text = "apiKey can't be empty",
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+            }
         )
     }
 }

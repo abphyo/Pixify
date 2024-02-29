@@ -18,14 +18,14 @@ fun NavGraphBuilder.homeRoute(navController: NavHostController) {
         startDestination = PostRoute.PostFeed.route,
         route = MainRoute.Home.route
     ) {
-        composable(route = PostRoute.PostFeed.route) {
+        composable(route = PostRoute.PostFeed.route) { entry ->
             val navigateToPostScreen = { postId: Int ->
                 navController.navigate(PostRoute.Post.withStringArg(postId.toString()))
             }
             val isRouteFirstEntry = remember {
-                navController.currentBackStackEntry?.destination?.route == it.destination.route
+                navController.currentBackStackEntry?.destination?.route == entry.destination.route
             }
-            val homeViewModel = it.sharedViewModel<HomeViewModel>(navController = navController)
+            val homeViewModel = entry.sharedViewModel<HomeViewModel>(navController = navController)
             HomeScreen(
                 onPostItemClick = navigateToPostScreen,
                 isRouteFirstEntry = isRouteFirstEntry,

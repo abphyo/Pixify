@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import com.biho.ui.model.PixiMenuItem
 
 @Composable
-fun MaterialDropDownMenu(
+fun BuildDropDownMenu(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     items: List<PixiMenuItem>

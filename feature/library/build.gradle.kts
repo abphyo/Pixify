@@ -65,4 +65,7 @@ dependencies {
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicator)
 
+    // Immutable
+    implementation(libs.kotlinx.collections.immutable)
+
 }

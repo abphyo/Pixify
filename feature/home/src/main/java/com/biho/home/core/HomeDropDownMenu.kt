@@ -4,7 +4,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.biho.product.appbars.MaterialDropDownMenu
+import com.biho.product.appbars.BuildDropDownMenu
 import com.biho.resources.R
 import com.biho.ui.model.PixiMenuItem
 
@@ -16,7 +16,7 @@ fun HomeDropDownMenu(
     onRefresh: () -> Unit,
     onExit: () -> Unit,
 ) {
-    MaterialDropDownMenu(
+    BuildDropDownMenu(
         expanded = expanded,
         onDismissRequest = onDismissRequest,
         items = listOf(

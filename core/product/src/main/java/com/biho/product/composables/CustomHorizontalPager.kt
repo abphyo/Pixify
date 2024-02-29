@@ -31,7 +31,7 @@ import com.google.accompanist.pager.rememberPagerState
 @Composable
 fun CustomHorizontalPager(
     count: Int,
-    pagerState: PagerState = rememberPagerState(initialPage = 0),
+    pagerState: PagerState,
     interactionSource: MutableInteractionSource,
     modifier: Modifier,
     indicatorEnabled: Boolean = true,
@@ -111,6 +111,7 @@ fun AutoSlidePagerPreview() {
 
     CustomHorizontalPager(
         count = imageList.size,
+        pagerState = rememberPagerState(initialPage = 0),
         interactionSource = interactionSource,
         modifier = Modifier
             .fillMaxWidth()

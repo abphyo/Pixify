@@ -61,6 +61,7 @@ fun Authentication(
             username.text.isNotBlank() && apiKey.text.isNotBlank()
         }
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()

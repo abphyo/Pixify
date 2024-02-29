@@ -1,7 +1,5 @@
 package com.biho.login
 
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Tab
@@ -30,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -37,6 +37,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.biho.login.core.AuthenticationPage
 import com.biho.login.core.ProfileSettingsPage
 import com.biho.pixify.core.model.danbooru.model.profile.ProfileEditField
+import com.biho.pixify.core.model.danbooru.model.profile.ProfileSettingActions
 import com.biho.product.appbars.BackOnlyTopAppBar
 import com.biho.product.composables.CustomHorizontalPager
 import com.biho.product.composables.HeaderSlider
@@ -56,6 +57,7 @@ fun EditProfileScreen(
     profileEditField: ProfileEditField,
     onUsernameChanged: (TextFieldValue) -> Unit,
     onApiKeyChanged: (TextFieldValue) -> Unit,
+    profileSettingActions: ProfileSettingActions,
     confirm: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
@@ -104,15 +106,14 @@ fun EditProfileScreen(
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
         Column(
-            modifier = Modifier.scrollable(
-                state = rememberScrollState(),
-                orientation = Orientation.Horizontal
-            )
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(state = rememberScrollState())
+                .padding(paddingValues),
         ) {
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues)
             ) {
                 val (header, box, button) = createRefs()
                 Box(
@@ -147,7 +148,7 @@ fun EditProfileScreen(
                                 )
                             },
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxSize()
                         ) {
                             tabItems.forEachIndexed { index, name ->
                                 Tab(
@@ -178,12 +179,26 @@ fun EditProfileScreen(
                             ) { page, _ ->
                                 when (page) {
                                     0 -> AuthenticationPage(
-                                        username = TextFieldValue(profileEditField.username),
-                                        apiKey = TextFieldValue(profileEditField.apiKey),
+                                        username = TextFieldValue(
+                                            text = profileEditField.username,
+                                            selection = TextRange(profileEditField.username.length)
+                                        ),
+                                        apiKey = TextFieldValue(
+                                            text = profileEditField.apiKey,
+                                            selection = TextRange(profileEditField.apiKey.length)
+                                        ),
                                         updateUsername = onUsernameChanged,
                                         updateApiKey = onApiKeyChanged
                                     )
-                                    1 -> ProfileSettingsPage()
+
+                                    1 -> ProfileSettingsPage(
+                                        profileEditField = profileEditField,
+                                        setContentFilter = profileSettingActions.setContentFilter,
+                                        setPostScreenImageType = profileSettingActions.setPostScreenImageType,
+                                        setHomeScreenImageType = profileSettingActions.setHomeScreenImageType,
+                                        toggleSafeMode = profileSettingActions.toggleSafeMode,
+                                        toggleHideDeletedPost = profileSettingActions.toggleHideDeletedPost
+                                    )
                                 }
                             }
                         }
