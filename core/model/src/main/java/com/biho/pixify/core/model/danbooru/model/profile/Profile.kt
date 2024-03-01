@@ -5,6 +5,7 @@ import kotlinx.collections.immutable.toPersistentList
 
 data class Profile(
     val roomId: Int? = null,
+    val uuid: String? = null,
     val engine: Engine = Engine.SAFEBOORU,
     val id: Int? = null,
     val name: String? = null,
@@ -50,6 +51,7 @@ fun Profile.isGuest(): Boolean = isGuest
 fun Profile.getProfileEditField(): ProfileEditField {
     return ProfileEditField(
         userId = id ?: 0,
+        roomId = roomId,
         username = name ?: "",
         apiKey = apiKey ?: "",
         enabledSafeMode = profileSettings.enabledSafeMode,

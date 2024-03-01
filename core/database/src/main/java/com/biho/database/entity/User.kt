@@ -15,6 +15,9 @@ data class User(
     @ColumnInfo(name = "room_id")
     val roomId: Int = 0,
 
+    @ColumnInfo(name = "uuid")
+    val uuid: String,
+
     @ColumnInfo(name = "engine", defaultValue = "SAFEBOORU")
     val engine: Engine = Engine.SAFEBOORU,
 

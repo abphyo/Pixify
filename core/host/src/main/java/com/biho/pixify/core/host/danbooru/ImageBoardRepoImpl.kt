@@ -73,7 +73,7 @@ class ImageBoardRepoImpl(
                 ProfileSettingsField(
                     data = ProfileSettingsFieldData(
                         enableSafeMode = field.enabledSafeMode,
-                        showDeletedPosts = field.hideDeletedPosts,
+                        showDeletedPosts = !field.hideDeletedPosts,
                         defaultImageSize = field.postScreenImageType.type,
                         blacklistedTags = field.blacklistedTags.joinToString(separator = "\n")
                     )

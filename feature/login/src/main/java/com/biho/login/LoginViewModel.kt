@@ -48,10 +48,25 @@ class LoginViewModel(
 
     fun performLogin() {
         viewModelScope.launch {
+            loginStatus = LoginState.Loading
             loginUseCase.invoke(
                 name = username.text,
                 apiKey = apiKey.text
             ).collectLatest { result ->
+                result.onSuccess {
+                    loginStatus = LoginState.Success
+                }.onFailure { throwable ->
+                    loginStatus = LoginState.Failure(throwable.message)
+                }
+            }
+        }
+    }
+
+    fun performLoginAsGuest() {
+        viewModelScope.launch {
+            loginStatus = LoginState.Loading
+            println("perform login as guest")
+            loginAsGuestUseCase.invoke().collectLatest { result ->
                 result.onSuccess {
                     loginStatus = LoginState.Success
                 }.onFailure { throwable ->

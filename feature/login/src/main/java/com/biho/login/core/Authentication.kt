@@ -2,8 +2,10 @@ package com.biho.login.core
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,6 +29,7 @@ import com.biho.product.composables.CustomOutlineTextField
 import com.biho.product.composables.SurveyButton
 import com.biho.resources.R
 import com.biho.resources.theme.DIMENS_10dp
+import com.biho.resources.theme.DIMENS_20dp
 import com.biho.resources.theme.DIMENS_30dp
 import com.biho.resources.theme.LocalLexFontFamily
 import com.biho.resources.theme.TEXT_SIZE_16sp
@@ -40,6 +43,7 @@ fun Authentication(
     updateUsername: (TextFieldValue) -> Unit,
     updateApiKey: (TextFieldValue) -> Unit,
     login: () -> Unit,
+    loginAsGuest: () -> Unit
 ) {
     var textField1Empty by rememberSaveable {
         mutableStateOf(false)
@@ -65,7 +69,7 @@ fun Authentication(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(all = DIMENS_30dp)
+            .padding(horizontal = DIMENS_30dp, vertical = DIMENS_10dp)
     ) {
         val loginText = "Log in"
         val titleText = "Log in to your account"
@@ -113,7 +117,8 @@ fun Authentication(
                         color = MaterialTheme.colorScheme.error,
                         modifier = Modifier.fillMaxWidth()
                     )
-            }
+            },
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
         Text(
             modifier = Modifier.padding(top = DIMENS_10dp),
@@ -139,12 +144,13 @@ fun Authentication(
                         color = MaterialTheme.colorScheme.error,
                         modifier = Modifier.fillMaxWidth()
                     )
-            }
+            },
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = DIMENS_30dp),
+                .padding(bottom = DIMENS_20dp),
             contentAlignment = Alignment.CenterEnd
         ) {
             Text(
@@ -162,6 +168,18 @@ fun Authentication(
             },
             text = "Login",
             isEnabled = enabledLoginButton
+        )
+        Spacer(modifier = Modifier.height(DIMENS_10dp))
+        SurveyButton(
+            modifier = Modifier
+                .fillMaxWidth(),
+            onClick = {
+                println("clicked login button!")
+                loginAsGuest()
+            },
+            text = "Login as guest",
+            isEnabled = true,
+            backgroundColor = theming_green
         )
         Box(
             modifier = Modifier

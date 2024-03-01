@@ -17,7 +17,15 @@ class UpdateProfileSettings(
                 if (statusCode == 204) imageBoardRepository.getProfile()
                     .mapSuccess { profile, _ ->
                         println("updating new profile")
-                        userRepository.updateUser(profile)
+                        try {
+                            userRepository.updateUser(
+                                user = profile,
+                                roomId = field.roomId!!
+                            )
+                        } catch (e: Exception) {
+                            if (e is NullPointerException)
+                                println("local update failed, sth wrong with database!")
+                        }
                     }
             }
     }
@@ -33,9 +41,15 @@ class UpdateProfileSettings(
                     .mapSuccess { _, updateStatusCode ->
                         if (updateStatusCode == 200) imageBoardRepository.getProfile()
                             .mapSuccess { profile, finalStatusCode ->
-                                if (finalStatusCode == 200) userRepository.updateUser(
-                                    profile
-                                )
+                                if (finalStatusCode == 200) try {
+                                    userRepository.updateUser(
+                                        user = profile,
+                                        roomId = field.roomId!!
+                                    )
+                                } catch (e: Exception) {
+                                    if (e is NullPointerException)
+                                        println("local update failed, sth wrong with database!")
+                                }
                             }
                     }
             }

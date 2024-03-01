@@ -131,10 +131,10 @@ fun EditProfileScreen(
                         top.linkTo(header.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                    }
+                        bottom.linkTo(button.top)
+                    }.fillMaxSize()
                 ) {
                     Column(
-                        modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Top
                     ) {
                         TabRow(

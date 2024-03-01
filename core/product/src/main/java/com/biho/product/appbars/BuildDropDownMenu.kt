@@ -4,6 +4,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
 import com.biho.ui.model.PixiMenuItem
 
 @Composable
@@ -11,7 +12,7 @@ fun BuildDropDownMenu(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     items: List<PixiMenuItem>,
-    pressOffset: DpOffset
+    pressOffset: DpOffset = DpOffset(x = 0.dp, y = 0.dp)
 ) {
     DropdownMenu(
         expanded = expanded,

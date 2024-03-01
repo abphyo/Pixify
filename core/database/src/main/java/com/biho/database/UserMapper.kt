@@ -5,10 +5,12 @@ import com.biho.pixify.core.model.danbooru.model.profile.LocalProfileSettings
 import com.biho.pixify.core.model.danbooru.model.profile.Profile
 import com.biho.pixify.core.model.danbooru.model.profile.ProfileData
 import com.biho.pixify.core.model.danbooru.model.profile.ProfileSettings
+import java.util.UUID
 
 fun User.toProfile(): Profile {
     return Profile(
         roomId = roomId,
+        uuid = uuid,
         engine = engine,
         id = id,
         name = name,
@@ -40,9 +42,10 @@ fun User.toProfile(): Profile {
 
 fun Profile.toUser(): User {
     return User(
+        uuid = uuid ?: UUID.randomUUID().toString(),
         engine = engine,
         id = id ?: 0,
-        name = name ?: "Lucker",
+        name = name ?: "Guest",
         apiKey = apiKey ?: "",
         isActive = isActive,
         isGuest = isGuest,

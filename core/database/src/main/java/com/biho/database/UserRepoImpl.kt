@@ -19,15 +19,15 @@ class UserRepoImpl(
     private val userDao: UserDao
 ) : UserRepository {
 
-    override suspend fun addUser(user: Profile) {
-        try {
+    override suspend fun addUser(user: Profile): Result<Int> {
+        return try {
             ioScope.async {
-                Result.success(userDao.addUser(user.toUser()))
+                Result.success(userDao.addUser(user.toUser()).toInt())
             }.await()
         } catch (e: Exception) {
             Result.failure(e)
-        }.onSuccess { roomId: Long ->
-            switchUser(roomId.toInt())
+        }.onSuccess { roomId: Int ->
+            switchUser(roomId)
         }.onFailure { throwable ->
             throwable.printStackTrace()
         }
@@ -37,8 +37,9 @@ class UserRepoImpl(
         return userDao.isUserExists(name = name, apiKey = apiKey) != 0
     }
 
-    override suspend fun updateUser(user: Profile) {
-        userDao.updateUser(user.toUser())
+    override suspend fun updateUser(user: Profile, roomId: Int) {
+        println("updated user: $user")
+        userDao.updateUser(user.toUser().copy(roomId = roomId))
     }
 
     override suspend fun deleteUser(user: Profile): Result<Unit> {

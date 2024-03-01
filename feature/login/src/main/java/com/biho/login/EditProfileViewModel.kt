@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -33,7 +32,7 @@ class EditProfileViewModel(
     getUsersFromDatabase: GetUsersFromDatabase,
 ) : ViewModel() {
 
-    private lateinit var activeUser: Profile
+    private val activeUser: Profile = getUsersFromDatabase.activeUser.value
 
     val profileEditField: Flow<ProfileEditField> = sessionCache.data
 
@@ -47,11 +46,9 @@ class EditProfileViewModel(
 
     init {
         viewModelScope.launch {
-            getUsersFromDatabase.invoke(active = true).collectLatest { profile ->
-                activeUser = profile
-                sessionCache.updateData {
-                    activeUser.getProfileEditField()
-                }
+            sessionCache.updateData {
+                println("activeUser: $activeUser")
+                activeUser.getProfileEditField()
             }
         }
     }
@@ -144,6 +141,7 @@ class EditProfileViewModel(
 
     override fun onCleared() {
         super.onCleared()
+        println("edit viewModel clear")
         viewModelScope.launch {
             sessionCache.updateData {
                 ProfileEditField()

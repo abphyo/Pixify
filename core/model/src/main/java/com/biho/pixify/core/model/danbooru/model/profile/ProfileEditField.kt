@@ -16,6 +16,7 @@ import kotlinx.serialization.encoding.Encoder
 @Serializable
 data class ProfileEditField(
     val userId: Int = 0,
+    val roomId: Int? = null,
     val username: String = "",
     val apiKey: String = "",
     val enabledSafeMode: Boolean = true,

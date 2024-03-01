@@ -98,7 +98,8 @@ fun NavGraphBuilder.libraryRoute(navController: NavHostController) {
                 navigateToProfile = navigateToProfile,
                 updateUsername = updateUsername,
                 updateApiKey = updateApiKey,
-                login = { loginViewModel.performLogin() }
+                login = { loginViewModel.performLogin() },
+                loginAsGuest = { loginViewModel.performLoginAsGuest() }
             )
         }
         composable(route = LibraryRoute.EditProfile.route) { entry ->

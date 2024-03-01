@@ -11,7 +11,7 @@ class GetUsersFromDatabase(
     operator fun invoke(): Flow<List<Profile>> {
         return userRepository.getUsers()
     }
-    operator fun invoke(active: Boolean): StateFlow<Profile> {
-        return userRepository.activeUser
-    }
+
+    val activeUser: StateFlow<Profile> = userRepository.activeUser
+
 }

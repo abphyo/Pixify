@@ -20,7 +20,8 @@ fun SurveyButton(
     modifier: Modifier,
     onClick: () -> Unit,
     text: String,
-    isEnabled: Boolean
+    isEnabled: Boolean,
+    backgroundColor: Color = MaterialTheme.colorScheme.primary
 ) {
     Button(
         enabled = isEnabled,
@@ -28,7 +29,7 @@ fun SurveyButton(
         onClick = onClick,
         shape = RoundedCornerShape(DIMENS_32dp),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colorScheme.primary
+            backgroundColor = backgroundColor
         )
     ) {
         Text(

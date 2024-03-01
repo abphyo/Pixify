@@ -1,7 +1,6 @@
 package com.biho.product.composables
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -42,7 +41,8 @@ fun CustomOutlineTextField(
     placeholder: String,
     leadingIcon: Int,
     visualTransformation: VisualTransformation,
-    supportingText: @Composable () -> Unit
+    supportingText: @Composable () -> Unit,
+    containerColor: Color = MaterialTheme.colorScheme.surfaceVariant
 ) {
     OutlinedTextField(
         shape = MaterialTheme.shapes.small,
@@ -85,8 +85,8 @@ fun CustomOutlineTextField(
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = Color.Transparent,
             unfocusedBorderColor = Color.Transparent,
-            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
+            focusedContainerColor = containerColor,
+            unfocusedContainerColor = containerColor
         ),
         supportingText = supportingText
     )
