@@ -1,5 +1,6 @@
 package com.biho.pixify.core.domain.usecases
 
+import com.biho.pixify.core.model.danbooru.model.profile.Profile
 import com.biho.pixify.core.model.danbooru.model.profile.ProfileEditField
 import com.biho.pixify.core.model.danbooru.repository.ImageBoardRepository
 import com.biho.pixify.core.model.danbooru.repository.UserRepository
@@ -53,6 +54,18 @@ class UpdateProfileSettings(
                             }
                     }
             }
+    }
+
+    suspend fun updateForGuest(
+        profile: Profile,
+        roomId: Int?
+    ): Result<Unit> {
+        return try {
+            userRepository.updateUser(user = profile, roomId = roomId!!)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(Throwable(e))
+        }
     }
 
 }

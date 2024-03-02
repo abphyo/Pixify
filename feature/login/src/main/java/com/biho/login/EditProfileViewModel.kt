@@ -16,11 +16,14 @@ import com.biho.pixify.core.model.danbooru.model.profile.ContentFilter
 import com.biho.pixify.core.model.danbooru.model.profile.PostScreenImageType
 import com.biho.pixify.core.model.danbooru.model.profile.Profile
 import com.biho.pixify.core.model.danbooru.model.profile.ProfileEditField
+import com.biho.pixify.core.model.danbooru.model.profile.bindProfileEditField
 import com.biho.pixify.core.model.danbooru.model.profile.getProfileEditField
+import com.biho.pixify.core.model.danbooru.model.profile.isGuest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -32,7 +35,7 @@ class EditProfileViewModel(
     getUsersFromDatabase: GetUsersFromDatabase,
 ) : ViewModel() {
 
-    private val activeUser: Profile = getUsersFromDatabase.activeUser.value
+    private lateinit var activeUser: Profile
 
     val profileEditField: Flow<ProfileEditField> = sessionCache.data
 
@@ -46,9 +49,12 @@ class EditProfileViewModel(
 
     init {
         viewModelScope.launch {
-            sessionCache.updateData {
-                println("activeUser: $activeUser")
-                activeUser.getProfileEditField()
+            getUsersFromDatabase.activeUser.collectLatest { profile ->
+                activeUser = profile
+                sessionCache.updateData {
+                    println("activeUser: $activeUser")
+                    activeUser.getProfileEditField()
+                }
             }
         }
     }
@@ -74,9 +80,15 @@ class EditProfileViewModel(
 
                 activeUser.name == field.username && activeUser.apiKey == field.apiKey -> {
                     println("tried to update profile")
-                    updateProfileSettings.update(
-                        field = field
-                    )
+                    when {
+                        activeUser.isGuest() -> updateProfileSettings.updateForGuest(
+                            profile = activeUser.bindProfileEditField(field),
+                            roomId = activeUser.roomId
+                        )
+                        !activeUser.isGuest -> updateProfileSettings.update(
+                            field = field
+                        )
+                    }
                 }
 
             }

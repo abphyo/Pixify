@@ -62,3 +62,18 @@ fun Profile.getProfileEditField(): ProfileEditField {
         blacklistedTags = profileSettings.blackListTags.toPersistentList()
     )
 }
+
+fun Profile.bindProfileEditField(field: ProfileEditField): Profile {
+    return this.copy(
+        profileSettings = ProfileSettings(
+            enabledSafeMode = field.enabledSafeMode,
+            hideDeletedPosts = field.hideDeletedPosts,
+            postScreenImagePref = field.postScreenImageType,
+            blackListTags = field.blacklistedTags.toList()
+        ),
+        localProfileSettings = LocalProfileSettings(
+            contentFiltering = field.contentFilter,
+            contentImagePref = field.homeScreenImageType
+        )
+    )
+}

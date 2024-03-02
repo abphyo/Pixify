@@ -104,7 +104,7 @@ fun NavGraphBuilder.libraryRoute(navController: NavHostController) {
         }
         composable(route = LibraryRoute.EditProfile.route) { entry ->
             val editProfileViewModel =
-                koinViewModel<EditProfileViewModel>(viewModelStoreOwner = entry)
+                koinViewModel<EditProfileViewModel>()
             val cachedFields by editProfileViewModel.profileEditField.collectAsState(initial = ProfileEditField())
             val updateUsername = { value: TextFieldValue ->
                 editProfileViewModel.updateUsername(value)

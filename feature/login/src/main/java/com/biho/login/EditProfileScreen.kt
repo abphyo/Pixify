@@ -123,6 +123,7 @@ fun EditProfileScreen(
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                         }
+                        .fillMaxSize()
                 ) {
                     HeaderSlider()
                 }
@@ -209,7 +210,7 @@ fun EditProfileScreen(
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                         bottom.linkTo(parent.bottom)
-                    }
+                    }.fillMaxSize()
                 ) {
                     Button(
                         enabled = isButtonEnabled,

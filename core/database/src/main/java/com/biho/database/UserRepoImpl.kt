@@ -1,7 +1,6 @@
 package com.biho.database
 
 import com.biho.database.daos.UserDao
-import com.biho.database.entity.User
 import com.biho.pixify.core.model.danbooru.model.profile.Profile
 import com.biho.pixify.core.model.danbooru.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
@@ -64,8 +63,8 @@ class UserRepoImpl(
     }
 
     override val activeUser: StateFlow<Profile> = userDao.getActiveUser(active = true)
-        .transform<User, Profile> { user ->
-            user.toProfile()
+        .transform { user ->
+            emit(user.toProfile())
         }.stateIn(
             scope = ioScope,
             started = SharingStarted.Eagerly,
