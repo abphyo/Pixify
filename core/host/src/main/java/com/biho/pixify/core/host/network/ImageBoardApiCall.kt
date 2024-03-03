@@ -5,13 +5,14 @@ import com.biho.pixify.core.model.danbooru.repository.ImageBoardRepository
 import com.biho.pixify.core.model.util.DomainResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import okhttp3.ResponseBody
 import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException
 
-abstract class ApiCall : ImageBoardRepository {
+abstract class ImageBoardApiCall : ImageBoardRepository {
 
     suspend inline fun <A, B> toDomain(
         crossinline apiCall: suspend () -> Response<A>,
@@ -43,16 +44,16 @@ abstract class ApiCall : ImageBoardRepository {
     ): DomainResult<Unit> {
         return withContext(Dispatchers.IO) {
             try {
-                println("tried profile update api call")
                 val response = apiCall(mapper())
-                if (response.isSuccessful) {
-                    DomainResult.Success(
+                when {
+                    response.isSuccessful -> DomainResult.Success(
                         data = Unit,
                         statusCode = response.code()
                     )
-                } else {
-                    val errorDto = response.errorBody()?.toErrorDto()
-                    DomainResult.Error(message = errorDto?.message ?: "Unexpected error occurred!")
+                    else -> {
+                        val errorDto = response.errorBody()?.toErrorDto()
+                        DomainResult.Error(message = errorDto?.message ?: "Unexpected error occurred!")
+                    }
                 }
             } catch (e: HttpException) {
                 DomainResult.Error(message = e.localizedMessage ?: "Unexpected error occurred!")
@@ -62,13 +63,17 @@ abstract class ApiCall : ImageBoardRepository {
         }
     }
 
-    fun ResponseBody.toErrorDto(): PostErrorDto? {
-        return try {
-            Json.decodeFromString(this.toString().trimIndent())
-        } catch (e: Exception) {
-            println("decoded error response: ${e.message}")
-            null
-        }
-    }
+}
 
+fun ResponseBody.toErrorDto(): PostErrorDto? {
+    return try {
+        Json.decodeFromString(
+            deserializer = PostErrorDto.serializer(),
+            string = this.toString().trimIndent()
+        )
+    } catch (e: Exception) {
+        if (e is SerializationException)
+            println("error decoding exception: ${e.message}")
+        null
+    }
 }

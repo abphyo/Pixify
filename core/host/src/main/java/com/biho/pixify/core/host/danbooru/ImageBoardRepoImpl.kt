@@ -5,7 +5,7 @@ import com.biho.pixify.core.host.danbooru.dtos.login.ProfileDto
 import com.biho.pixify.core.host.danbooru.dtos.login.ProfileSettingsField
 import com.biho.pixify.core.host.danbooru.dtos.login.ProfileSettingsFieldData
 import com.biho.pixify.core.host.danbooru.dtos.login.toProfile
-import com.biho.pixify.core.host.network.ApiCall
+import com.biho.pixify.core.host.network.ImageBoardApiCall
 import com.biho.pixify.core.host.danbooru.dtos.post.PostDto
 import com.biho.pixify.core.host.danbooru.dtos.post.toPost
 import com.biho.pixify.core.host.danbooru.dtos.tag.TagAutoCompleteDtoList
@@ -27,7 +27,7 @@ import okhttp3.OkHttpClient
 class ImageBoardRepoImpl(
     private val appContext: Context,
     userRepository: UserRepository
-) : ApiCall() {
+) : ImageBoardApiCall() {
 
     private val activeProfile = userRepository.activeUser.value
 

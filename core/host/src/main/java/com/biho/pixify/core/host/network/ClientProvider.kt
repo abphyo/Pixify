@@ -2,7 +2,7 @@ package com.biho.pixify.core.host.network
 
 import android.content.Context
 import android.util.Log
-import com.biho.pixify.core.host.danbooru.ApiService
+import com.biho.pixify.core.host.danbooru.HostApiService
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager
@@ -18,18 +18,18 @@ import retrofit2.Retrofit
 fun provideAuthClient(
     hostType: HostType,
     okHttpClient: OkHttpClient
-): ApiService {
+): HostApiService {
 
     return Retrofit.Builder()
         .baseUrl(hostType.getBaseUrl())
         .client(okHttpClient)
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .build()
-        .create(ApiService::class.java)
+        .create(HostApiService::class.java)
 
 }
 
-fun provideClient(appContext: Context, hostType: HostType): ApiService {
+fun provideClient(appContext: Context, hostType: HostType): HostApiService {
 
     val checkerInterceptor = provideChuckerInterceptor(appContext)
     val okHttpClient = OkHttpClient.Builder()
@@ -40,7 +40,7 @@ fun provideClient(appContext: Context, hostType: HostType): ApiService {
         .client(okHttpClient)
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .build()
-        .create(ApiService::class.java)
+        .create(HostApiService::class.java)
 
 }
 

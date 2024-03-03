@@ -16,7 +16,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface ApiService {
+interface HostApiService {
     @GET("/posts/{id}.json")
     suspend fun getPost(
         @Path("id") id: Int
