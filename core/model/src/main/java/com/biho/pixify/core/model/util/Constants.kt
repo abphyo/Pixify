@@ -8,4 +8,7 @@ object Constants {
     const val WEB_CLIENT_ID = "839337761097-52dbn50sa681mq9j7cjck60iorf02skh.apps.googleusercontent.com"
     const val TEMP_DIRECTORY = "temp"
     const val ONE_SECOND = 1000L
+    const val APP_NAME = "Pixify"
+    const val DOWNLOAD_CHANNEL = "download_channel"
+    const val NOTIFICATION_ID = "notification_id"
 }

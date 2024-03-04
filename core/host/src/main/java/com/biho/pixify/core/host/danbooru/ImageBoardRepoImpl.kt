@@ -1,6 +1,5 @@
 package com.biho.pixify.core.host.danbooru
 
-import android.content.Context
 import com.biho.pixify.core.host.danbooru.dtos.login.ProfileDto
 import com.biho.pixify.core.host.danbooru.dtos.login.ProfileSettingsField
 import com.biho.pixify.core.host.danbooru.dtos.login.ProfileSettingsFieldData
@@ -12,6 +11,7 @@ import com.biho.pixify.core.host.danbooru.dtos.tag.TagAutoCompleteDtoList
 import com.biho.pixify.core.host.danbooru.dtos.tag.toTagAutoCompleteList
 import com.biho.pixify.core.host.network.AuthInterceptor
 import com.biho.pixify.core.host.network.HostType
+import com.biho.pixify.core.host.network.NetworkRepository
 import com.biho.pixify.core.host.network.provideAuthClient
 import com.biho.pixify.core.host.network.provideClient
 import com.biho.pixify.core.model.danbooru.model.post.Post
@@ -21,26 +21,27 @@ import com.biho.pixify.core.model.danbooru.model.profile.isGuest
 import com.biho.pixify.core.model.danbooru.model.tag.TagAutoComplete
 import com.biho.pixify.core.model.danbooru.repository.UserRepository
 import com.biho.pixify.core.model.util.DomainResult
-import com.chuckerteam.chucker.api.ChuckerInterceptor
 import okhttp3.OkHttpClient
 
 class ImageBoardRepoImpl(
-    private val appContext: Context,
-    userRepository: UserRepository
+    userRepository: UserRepository,
+    networkRepository: NetworkRepository
 ) : ImageBoardApiCall() {
 
     private val activeProfile = userRepository.activeUser.value
 
     private val hostType: HostType = HostType.SAFEBOORU
 
-    private val authOkHttpClient = getAuthOkHttpClient(
+    private val dohConfiguredOkhttp = networkRepository.okHttpClient
+
+    private val authOkHttp = getAuthOkHttpClient(
         name = activeProfile.name.orEmpty(),
         apiKey = activeProfile.apiKey.orEmpty()
     )
 
-    private val clientNoAuth = provideClient(appContext, hostType)
+    private val clientNoAuth = provideClient(hostType, dohConfiguredOkhttp)
 
-    private val clientAuth = provideAuthClient(hostType, authOkHttpClient)
+    private val clientAuth = provideAuthClient(hostType, authOkHttp)
 
     private val client = when {
         activeProfile.isGuest() -> clientNoAuth
@@ -83,8 +84,7 @@ class ImageBoardRepoImpl(
     }
 
     private fun getAuthOkHttpClient(name: String, apiKey: String): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(ChuckerInterceptor(appContext))
+        return dohConfiguredOkhttp.newBuilder()
             .addInterceptor(AuthInterceptor(name = name, apiKey = apiKey))
             .build()
     }

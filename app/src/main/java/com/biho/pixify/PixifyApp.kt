@@ -1,6 +1,9 @@
 package com.biho.pixify
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import coil.disk.DiskCache
@@ -20,6 +23,13 @@ class PixifyApp: Application(), ImageLoaderFactory {
             androidContext(this@PixifyApp)
             modules(PixifyModules())
         }
+        val downloadNotifyChannel = NotificationChannel(
+            getString(R.string.download_channel_id),
+            getString(R.string.download_channel_name),
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(downloadNotifyChannel)
     }
 
     override fun newImageLoader(): ImageLoader {

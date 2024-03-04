@@ -29,12 +29,8 @@ fun provideAuthClient(
 
 }
 
-fun provideClient(appContext: Context, hostType: HostType): HostApiService {
+fun provideClient(hostType: HostType, okHttpClient: OkHttpClient): HostApiService {
 
-    val checkerInterceptor = provideChuckerInterceptor(appContext)
-    val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(checkerInterceptor)
-        .build()
     return Retrofit.Builder()
         .baseUrl(hostType.getBaseUrl())
         .client(okHttpClient)

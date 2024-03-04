@@ -91,7 +91,6 @@ class DownloadRepositoryImpl(
             } catch (e: Exception) {
                 println("error downloading file")
             }
-            networkRepositoryImpl.downloadFile(url)
         }
     }
 }

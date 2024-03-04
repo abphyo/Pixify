@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Pixify</string>
+    <string name="download_channel_id">download_channel</string>
+    <string name="download_channel_name">Downloads</string>
 </resources>
