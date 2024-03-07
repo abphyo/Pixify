@@ -1,9 +1,8 @@
-package com.biho.product.movable
+package com.biho.product.extensions
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import org.koin.androidx.compose.koinViewModel

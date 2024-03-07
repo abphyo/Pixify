@@ -26,11 +26,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import com.biho.product.appbars.BuildDropDownMenu
+import com.biho.ui.model.BuildDropDownMenu
 import com.biho.resources.theme.DIMENS_275dp
-import com.biho.resources.theme.DIMENS_280dp
-import com.biho.resources.theme.DIMENS_300dp
-import com.biho.resources.theme.DIMENS_345dp
 import com.biho.ui.model.PixiMenuItem
 
 @OptIn(ExperimentalMaterial3Api::class)

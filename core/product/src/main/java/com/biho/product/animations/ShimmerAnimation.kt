@@ -26,6 +26,7 @@ fun shimmerAnimation(): Brush {
         animationSpec = infiniteRepeatable(
             animation = tween(
                 durationMillis = 1000,
+                delayMillis = 1000,
                 easing = FastOutSlowInEasing
             )
         ),

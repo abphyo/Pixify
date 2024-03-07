@@ -20,7 +20,7 @@ object ProfileEditFieldSerializer : Serializer<ProfileEditField> {
             )
         } catch (e: SerializationException) {
             e.printStackTrace()
-            return defaultValue
+            defaultValue
         }
 
     }

@@ -11,4 +11,12 @@ object Constants {
     const val APP_NAME = "Pixify"
     const val DOWNLOAD_CHANNEL = "download_channel"
     const val NOTIFICATION_ID = "notification_id"
+    const val FILE_URL = "file_url"
+    const val POST_ID = "post_id"
+
+    //Download status
+    const val FAILED = "Failed"
+    const val DOWNLOADED = "Downloaded"
+    const val CANCELED = "unresolved reference"
+    const val ADDED = "already being downloaded"
 }

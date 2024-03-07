@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.biho.home.HomeScreen
 import com.biho.home.HomeViewModel
-import com.biho.product.movable.sharedViewModel
+import com.biho.product.extensions.sharedViewModel
 import com.biho.ui.screen.MainRoute
 import com.biho.ui.screen.PostRoute
 import com.biho.ui.screen.withStringArg

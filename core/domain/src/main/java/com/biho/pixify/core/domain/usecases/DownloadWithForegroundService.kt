@@ -16,6 +16,7 @@ import com.biho.pixify.core.host.download.DownloadRepository
 import com.biho.pixify.core.model.util.Constants
 import com.biho.pixify.core.model.util.DownloadResult
 import com.biho.pixify.core.model.util.FileUtils
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
@@ -25,6 +26,9 @@ class DownloadWithForegroundService(
     private val context: Context,
     private val downloadRepoImpl: DownloadRepository
 ) {
+    val downloadStatusChannel = Channel<String>()
+    fun isPostAlreadyAdded(postId: Int): Boolean =
+        downloadRepoImpl.isPostAlreadyDownloading(postId = postId)
 
     suspend operator fun invoke(postId: Int, fileUrl: String): Flow<Pair<Int, Notification>> {
 
@@ -82,23 +86,26 @@ class DownloadWithForegroundService(
                 sample = 1200L
             ).collectLatest { result ->
 
-                when(result) {
+                when (result) {
                     is DownloadResult.Starting ->
-                        Pair(
-                            notificationId,
-                            bootstrapNotification
-                                .setProgress(
-                                    100,
-                                    0,
-                                    true
-                                )
-                                .setSubText("0% • 0B/s")
-                                .setContentText("0B / 0B")
-                                .build()
+                        emit(
+                            Pair(
+                                notificationId,
+                                bootstrapNotification
+                                    .setProgress(
+                                        100,
+                                        0,
+                                        true
+                                    )
+                                    .setSubText("0% • 0B/s")
+                                    .setContentText("0B / 0B")
+                                    .build()
+                            )
                         )
                     is DownloadResult.Downloading -> {
                         val fmtSize = FileUtils.formatFileSize(bytes = result.size)
-                        val fmtDownloadedSize = FileUtils.formatFileSize(bytes = result.downloadedSize)
+                        val fmtDownloadedSize =
+                            FileUtils.formatFileSize(bytes = result.downloadedSize)
                         val progressPercentage = (result.progress * 100).toInt()
                         val fmtSpeed = FileUtils.formatFileSize(bytes = result.speed)
                         emit(
@@ -116,6 +123,7 @@ class DownloadWithForegroundService(
                             )
                         )
                     }
+
                     is DownloadResult.Completed -> {
 
                         FileUtils.copyFile(
@@ -151,7 +159,9 @@ class DownloadWithForegroundService(
                                     .build()
                             )
                         )
+                        downloadStatusChannel.send(Constants.DOWNLOADED)
                     }
+
                     is DownloadResult.Failed -> {
                         emit(
                             Pair(
@@ -168,6 +178,7 @@ class DownloadWithForegroundService(
                                     .build()
                             )
                         )
+                        downloadStatusChannel.send(Constants.FAILED)
                     }
                 }
 

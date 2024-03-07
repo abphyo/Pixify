@@ -4,7 +4,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.biho.product.appbars.BuildDropDownMenu
+import com.biho.ui.model.BuildDropDownMenu
 import com.biho.resources.R
 import com.biho.ui.model.PixiMenuItem
 

@@ -15,7 +15,13 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,7 +32,9 @@ import com.biho.resources.theme.LocalGridItemPaddingSmall
 import com.biho.resources.theme.LocalWindowSizeInfo
 import com.biho.resources.theme.WindowSize
 import com.biho.ui.model.LazyGrids
+import com.biho.ui.model.PixiMenuItem
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostsGrid(
     type: LazyGrids,
@@ -35,11 +43,29 @@ fun PostsGrid(
     gridState: LazyStaggeredGridState,
     contentPadding: PaddingValues,
     onItemClick: (Int) -> Unit,
-    onItemLongClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    bottomSheetItems: (Post) -> List<PixiMenuItem>
 ) {
+    
+
+    var isBottomSheetVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    val bottomSheetState = rememberModalBottomSheetState()
+
     val postComposable = posts.movable { post ->
-        PostGridItem(post = post, onClick = onItemClick, onLongClick = onItemLongClick)
+        PostGridItem(
+            post = post,
+            onClick = onItemClick,
+            onLongClick = {
+                isBottomSheetVisible = true
+                          },
+            isDropDownExpanded = isBottomSheetVisible,
+            dropDownDismiss = { isBottomSheetVisible = false },
+            bottomSheetState = bottomSheetState,
+            bottomSheetItems = bottomSheetItems(post)
+        )
     }
 
     when (type) {

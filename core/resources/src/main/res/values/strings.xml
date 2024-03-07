@@ -45,4 +45,9 @@
 
     <string name="animation">Animation</string>
 
+    <!-- Post -->
+    <string name="share">Share</string>
+    <string name="favorite">Favorite</string>
+    <string name="download">Download</string>
+
 </resources>

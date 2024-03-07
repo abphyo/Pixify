@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -20,13 +21,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.biho.home.core.HomeTopAppBar
 import com.biho.home.core.PostsGrid
 import com.biho.home.state.PostsFeedUiState
+import com.biho.pixify.core.model.danbooru.model.post.Post
+import com.biho.resources.R
 import com.biho.resources.theme.LocalScrollToTopChannel
 import com.biho.resources.theme.LocalWindowSizeInfo
 import com.biho.resources.theme.WindowSize
 import com.biho.ui.model.LazyGrids
+import com.biho.ui.model.PixiMenuItem
 import eu.bambooapps.material3.pullrefresh.PullRefreshIndicator
 import eu.bambooapps.material3.pullrefresh.pullRefresh
 import eu.bambooapps.material3.pullrefresh.rememberPullRefreshState
@@ -45,9 +51,6 @@ fun HomeScreen(
     canLoadMore: Boolean,
     postsState: PostsFeedUiState
 ) {
-    Box(modifier = Modifier, contentAlignment = Alignment.Center) {
-        Text("hello")
-    }
     val context = LocalContext.current
     val scrollToTopChannel = LocalScrollToTopChannel.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -109,6 +112,7 @@ fun HomeScreen(
                     },
                     scrollBehavior = scrollBehavior
                 )
+
                 is WindowSize.Medium -> {}
                 is WindowSize.Expanded -> {}
             }
@@ -133,7 +137,7 @@ fun HomeScreen(
                             gridState = lazyGridState,
                             contentPadding = paddingValues,
                             onItemClick = onPostItemClick,
-                            onItemLongClick = {}
+                            bottomSheetItems = bottomSheetItems()
                         )
                         PullRefreshIndicator(
                             refreshing = isRefreshing,
@@ -164,4 +168,54 @@ fun HomeScreen(
             }
         }
     }
+}
+
+fun bottomSheetItems() = { post: Post ->
+    listOf(
+        PixiMenuItem(
+            text = {
+                Text(text = stringResource(id = R.string.favourites))
+            },
+            enabled = false,
+            onClick = {},
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.favorite),
+                    contentDescription = stringResource(
+                        id = R.string.icon
+                    )
+                )
+            },
+        ),
+        PixiMenuItem(
+            text = {
+                Text(text = stringResource(id = R.string.download))
+            },
+            enabled = true,
+            onClick = {},
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.download),
+                    contentDescription = stringResource(
+                        id = R.string.icon
+                    )
+                )
+            },
+        ),
+        PixiMenuItem(
+            text = {
+                Text(text = stringResource(id = R.string.share))
+            },
+            enabled = false,
+            onClick = {},
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.share_filled),
+                    contentDescription = stringResource(
+                        id = R.string.icon
+                    )
+                )
+            },
+        )
+    )
 }

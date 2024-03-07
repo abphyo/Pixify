@@ -37,9 +37,6 @@ fun MainScreen() {
                 LocalScrollToTopChannel provides scrollToTopChannel
             )
         ) {
-            SideEffect {
-                Log.d("navbar_situation", "MainScreen: $isNavBarVisible")
-            }
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background,
