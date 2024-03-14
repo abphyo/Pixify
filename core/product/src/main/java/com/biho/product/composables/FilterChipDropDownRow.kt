@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.biho.ui.model.BuildDropDownMenu
 import com.biho.resources.theme.DIMENS_275dp
+import com.biho.ui.model.BuildDropDownMenuDismiss
 import com.biho.ui.model.PixiMenuItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -89,8 +90,9 @@ fun FilterChipDropDownRow(
                         )
                     }
             )
-            BuildDropDownMenu(
+            BuildDropDownMenuDismiss(
                 expanded = dropDownMenuVisible,
+                dismissOnClick = { dropDownMenuVisible = false },
                 onDismissRequest = { dropDownMenuVisible = false },
                 items = dropDownItems,
                 pressOffset = pressOffset.copy(

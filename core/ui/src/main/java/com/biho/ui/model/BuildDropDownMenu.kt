@@ -32,3 +32,34 @@ fun BuildDropDownMenu(
         }
     }
 }
+
+@Composable
+fun BuildDropDownMenuDismiss(
+    expanded: Boolean,
+    dismissOnClick: () -> Unit,
+    onDismissRequest: () -> Unit,
+    items: List<PixiMenuItem>,
+    pressOffset: DpOffset = DpOffset(x = 0.dp, y = 0.dp)
+) {
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismissRequest,
+        offset = pressOffset
+    ) {
+        items.forEachIndexed { _, item ->
+            item.run {
+                DropdownMenuItem(
+                    text = text,
+                    onClick = {
+                        onClick()
+                        dismissOnClick()
+                    },
+                    enabled = enabled,
+                    modifier = modifier,
+                    leadingIcon = leadingIcon,
+                    trailingIcon = trailingIcon
+                )
+            }
+        }
+    }
+}
